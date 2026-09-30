@@ -31,13 +31,13 @@ Firefox：打开 `about:debugging#/runtime/this-firefox`，选择“临时载入
 
 广告拦截仅依据扩展内的固定规则在浏览器中执行，不记录或上传请求地址。YouTube 页面结构经常变化，隐藏与自动跳过功能可能随其更新失效。
 
-本地模型每约 8 秒处理一段声音，因此字幕会有延迟，且 `whisper-tiny` 对口音和专业术语可能不够准确。离线使用实时字幕需要模型已下载并缓存。模型来自 [`onnx-community/whisper-tiny`](https://huggingface.co/onnx-community/whisper-tiny)。运行库许可证见 `vendor/`。
+本地模型每约 4 秒处理一段声音，随后还需要模型运算，因此字幕会有延迟；设备若无法跟上播放速度，扩展会提示并跳过过旧音频。`whisper-tiny` 对口音和专业术语可能不够准确。离线使用实时字幕需要模型已下载并缓存。模型来自 [`onnx-community/whisper-tiny`](https://huggingface.co/onnx-community/whisper-tiny)。运行库许可证见 `vendor/`。
 
 ## 开发与发布
 
-源码仓库锁定了本地运行库依赖。运行 `pnpm install` 后，`python3 scripts/package.py` 会把运行文件复制到 `vendor/` 并生成供商店上传的 `dist/keban-0.2.2.zip`。修改源码后重新加载扩展。发布前须在目标浏览器分别测试，并为 Chrome Web Store、Edge Add-ons、Firefox Add-ons 准备隐私说明、截图、支持页面和开发者账号。
+源码仓库锁定了本地运行库依赖。运行 `pnpm install` 后，`python3 scripts/package.py` 会把运行文件复制到 `vendor/` 并生成供商店上传的 `dist/keban-0.2.3.zip`。修改源码后重新加载扩展。发布前须在目标浏览器分别测试，并为 Chrome Web Store、Edge Add-ons、Firefox Add-ons 准备隐私说明、截图、支持页面和开发者账号。
 
-运行 `python3 scripts/package.py` 可生成供商店上传的 `dist/keban-0.2.2.zip`。
+运行 `python3 scripts/package.py` 可生成供商店上传的 `dist/keban-0.2.3.zip`。
 
 License: MIT，见 [LICENSE](LICENSE)。
 

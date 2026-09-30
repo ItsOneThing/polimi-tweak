@@ -471,8 +471,8 @@
         if (state.live !== live) return;
         if (data.type === "connected") { live.connected = true; clearTimeout(live.frameTimer); live.port.postMessage({ type: "init", wasmBase: chrome.runtime.getURL("vendor/") }); }
         if (data.type === "progress") $("#liveInfo").textContent = `正在下载本地语音模型：${Math.round(data.progress || 0)}%`;
-        if (data.type === "ready") { $("#liveInfo").textContent = "本地模型已就绪；约每 8 秒生成一段字幕。"; beginSampling(live); }
-        if (data.type === "transcript") { live.inFlight = false; if (data.text) setLiveText(data.text); }
+        if (data.type === "ready") { $("#liveInfo").textContent = "本地模型已就绪；约每 4 秒处理一段音频，显示速度取决于设备。"; beginSampling(live); }
+        if (data.type === "transcript") { live.inFlight = false; if (data.text) setLiveText(data.text); live.sendNextChunk?.(); }
         if (data.type === "error") { say(`本地识别失败：${data.error}`); stopLive(); }
         };
         const targetOrigin = new URL(frame.src).origin;
@@ -493,23 +493,36 @@
       const silent = context.createGain(); silent.gain.value = 0;
       source.connect(processor).connect(silent).connect(context.destination);
       live.context = context; live.source = source; live.processor = processor; live.silent = silent;
+      const chunkSamples = 16000 * 4;
+      const maxBufferedSamples = 16000 * 20;
       live.samples = []; live.inFlight = false;
       live.quietChunks = 0;
+      live.sendNextChunk = () => {
+        if (state.live !== live || live.inFlight) return;
+        while (live.samples.length >= chunkSamples) {
+          const chunk = Float32Array.from(live.samples.splice(0, chunkSamples));
+          let energy = 0;
+          for (let i = 0; i < chunk.length; i += 16) energy += chunk[i] * chunk[i];
+          const rms = Math.sqrt(energy / (chunk.length / 16));
+          live.quietChunks = rms < 0.0005 ? live.quietChunks + 1 : 0;
+          if (live.quietChunks >= 2) $("#liveInfo").textContent = "捕获的声音持续无声；若视频有声音，请选择“共享标签页声音”。";
+          if (rms < 0.0005) continue;
+          live.inFlight = true;
+          live.port.postMessage({ type: "audio", samples: chunk.buffer, language: live.language }, [chunk.buffer]);
+          break;
+        }
+      };
       processor.onaudioprocess = (event) => {
         if (state.live !== live) return;
         const input = event.inputBuffer.getChannelData(0);
         const stride = context.sampleRate / 16000;
         for (let i = 0; i < input.length; i += stride) live.samples.push(input[Math.floor(i)]);
-        if (live.samples.length >= 16000 * 8) {
-          const chunk = Float32Array.from(live.samples.slice(0, 16000 * 8));
-          live.samples = [];
-          let energy = 0;
-          for (let i = 0; i < chunk.length; i += 16) energy += chunk[i] * chunk[i];
-          const rms = Math.sqrt(energy / (chunk.length / 16));
-          live.quietChunks = rms < 0.0005 ? live.quietChunks + 1 : 0;
-          if (live.quietChunks === 2) $("#liveInfo").textContent = "捕获的声音持续无声；若视频有声音，请选择“共享标签页声音”。";
-          if (!live.inFlight) { live.inFlight = true; live.port.postMessage({ type: "audio", samples: chunk.buffer, language: live.language }, [chunk.buffer]); }
+        if (live.samples.length > maxBufferedSamples) {
+          const excess = live.samples.length - maxBufferedSamples;
+          live.samples.splice(0, Math.ceil(excess / chunkSamples) * chunkSamples);
+          $("#liveInfo").textContent = "本机识别速度跟不上播放，已跳过过旧音频以保持字幕接近当前画面。";
         }
+        live.sendNextChunk();
       };
       await context.resume();
       say("本地实时字幕已开启");
