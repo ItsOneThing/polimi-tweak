@@ -8,7 +8,7 @@
 
 - 0.5–3 倍速细调，10 秒快退/快进，A/B 片段循环。
 - 逐条记录带视频时间点的笔记；点击笔记回到对应位置，可导出 Markdown。
-- 实时字幕：较新的 Chrome / Edge 可尝试浏览器识别；也可使用本地 Whisper tiny 多语言模型。后者首次使用需要联网下载模型，之后由浏览器缓存，音频留在本机。若 Webex 视频音轨无法捕获，可在字幕区选择“共享标签页声音”，并在浏览器弹窗里选择当前标签页、勾选共享音频。
+- 实时字幕：默认识别意大利语原文，也可选自动判断、英语或中文。较新的 Chrome / Edge 可尝试浏览器识别；Firefox 使用本地 Whisper tiny 多语言模型。后者首次使用需要联网下载模型，之后由浏览器缓存，音频留在本机。若 Webex 视频音轨无法捕获，可在字幕区选择“共享标签页声音”，并在浏览器弹窗里选择当前标签页、勾选共享音频。
 - 可选用网页自带字幕轨，或从本机导入 `.srt` / `.vtt` 文件。Webex 若提供文字稿，也可从其播放器的 Transcript 面板打开。
 - 对可处理的视频提供 1–3 倍音量、人声频段增强与三级降噪滤波，可减轻低频嗡声和高频嘶声。与人声重叠的噪音无法完全去除；跨域媒体可能因浏览器音频安全限制而不可处理。
 - 可开关的轻量广告拦截：阻止常见广告域名的子资源请求，隐藏部分 YouTube 广告元素，并在跳过按钮出现时自动点击。YouTube 片头广告可能仍出现；此功能不能替代完整广告过滤器。
@@ -35,9 +35,9 @@ Firefox：打开 `about:debugging#/runtime/this-firefox`，选择“临时载入
 
 ## 开发与发布
 
-源码仓库锁定了本地运行库依赖。运行 `pnpm install` 后，`python3 scripts/package.py` 会把运行文件复制到 `vendor/` 并生成供商店上传的 `dist/keban-0.2.1.zip`。修改源码后重新加载扩展。发布前须在目标浏览器分别测试，并为 Chrome Web Store、Edge Add-ons、Firefox Add-ons 准备隐私说明、截图、支持页面和开发者账号。
+源码仓库锁定了本地运行库依赖。运行 `pnpm install` 后，`python3 scripts/package.py` 会把运行文件复制到 `vendor/` 并生成供商店上传的 `dist/keban-0.2.2.zip`。修改源码后重新加载扩展。发布前须在目标浏览器分别测试，并为 Chrome Web Store、Edge Add-ons、Firefox Add-ons 准备隐私说明、截图、支持页面和开发者账号。
 
-运行 `python3 scripts/package.py` 可生成供商店上传的 `dist/keban-0.2.1.zip`。
+运行 `python3 scripts/package.py` 可生成供商店上传的 `dist/keban-0.2.2.zip`。
 
 License: MIT，见 [LICENSE](LICENSE)。
 

@@ -147,7 +147,7 @@
           <h3>字幕</h3>
           <div class="row"><select id="tracks" class="grow" aria-label="网页字幕轨"><option value="">网页字幕：关闭</option></select></div>
           <div class="row"><label for="subtitleFile" class="small">导入 SRT/VTT</label><input id="subtitleFile" type="file" accept=".srt,.vtt,text/vtt" style="max-width:220px"></div>
-          <div class="row"><select id="audioSource" aria-label="实时字幕音频来源"><option value="video">视频音轨</option><option value="tab">共享标签页声音</option></select><select id="liveMode" aria-label="实时字幕识别方式"><option value="auto">自动选择</option><option value="local">本地模型</option><option value="browser">浏览器识别</option></select><button id="live" class="small">开启实时字幕</button></div>
+          <div class="row"><select id="audioSource" aria-label="实时字幕音频来源"><option value="video">视频音轨</option><option value="tab">共享标签页声音</option></select><select id="speechLanguage" aria-label="老师说的语言"><option value="italian">意大利语</option><option value="auto">自动判断</option><option value="english">英语</option><option value="chinese">中文</option></select><select id="liveMode" aria-label="实时字幕识别方式"><option value="auto">自动选择</option><option value="local">本地模型</option><option value="browser">浏览器识别</option></select><button id="live" class="small">开启实时字幕</button></div>
           <div class="hint" id="liveInfo">本地模型首次使用需下载约百 MB；浏览器识别可能使用浏览器厂商的在线服务。</div>
         </section></div>
         <div class="detail-page" data-page="notes" hidden><section>
@@ -419,10 +419,11 @@
     }
     const track = stream.getAudioTracks()[0];
     if (!track) { stream.getTracks().forEach((item) => item.stop()); say("没有获取到音频，请确认共享时勾选了“共享标签页音频”"); return; }
-    state.live = { stream, track, video: state.video, clearTimer: null };
+    state.live = { stream, track, video: state.video, language: $("#speechLanguage").value, clearTimer: null };
     $("#live").textContent = "关闭实时字幕";
     const choice = $("#liveMode").value;
-    if (choice === "browser" || (choice === "auto" && nativeSpeechAvailable())) {
+    if (choice === "browser" && state.live.language === "auto") { say("浏览器识别不能自动判断语言，请选择具体语言或本地模型"); stopLive(); return; }
+    if (choice === "browser" || (choice === "auto" && nativeSpeechAvailable() && state.live.language !== "auto")) {
       if (nativeSpeechAvailable()) {
         try { startNativeSpeech(state.live); return; }
         catch (error) { if (choice === "browser") { say(`浏览器识别不可用：${error.message}`); stopLive(); return; } }
@@ -433,7 +434,7 @@
   function startNativeSpeech(live) {
     const Recognition = window.SpeechRecognition || window.webkitSpeechRecognition;
     const recognition = new Recognition();
-    recognition.lang = "zh-CN";
+    recognition.lang = { italian: "it-IT", english: "en-US", chinese: "zh-CN" }[live.language] || "it-IT";
     recognition.continuous = true;
     recognition.interimResults = true;
     recognition.onresult = (event) => {
@@ -507,7 +508,7 @@
           const rms = Math.sqrt(energy / (chunk.length / 16));
           live.quietChunks = rms < 0.0005 ? live.quietChunks + 1 : 0;
           if (live.quietChunks === 2) $("#liveInfo").textContent = "捕获的声音持续无声；若视频有声音，请选择“共享标签页声音”。";
-          if (!live.inFlight) { live.inFlight = true; live.port.postMessage({ type: "audio", samples: chunk.buffer }, [chunk.buffer]); }
+          if (!live.inFlight) { live.inFlight = true; live.port.postMessage({ type: "audio", samples: chunk.buffer, language: live.language }, [chunk.buffer]); }
         }
       };
       await context.resume();
@@ -547,6 +548,7 @@
       live: !!state.live,
       liveInfo: $("#liveInfo").textContent,
       audioSource: $("#audioSource").value,
+      speechLanguage: $("#speechLanguage").value,
       liveMode: $("#liveMode").value,
       tracks: [...(video?.textTracks || [])].map((track, index) => ({ value: String(index), label: track.label || track.language || `字幕 ${index + 1}` })),
       selectedTrack: $("#tracks").value,
@@ -592,6 +594,7 @@
         break;
       case "live":
         $("#audioSource").value = message.audioSource || "video";
+        $("#speechLanguage").value = message.speechLanguage || "italian";
         $("#liveMode").value = message.liveMode || "auto";
         await toggleLiveCaptions();
         break;

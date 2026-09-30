@@ -62,6 +62,7 @@ function render(data) {
   $("#denoiseReadout").textContent = ["关闭", "轻", "中", "强"][data.denoise] || "关闭";
   if (first || data.live) {
     $("#audioSource").value = data.audioSource;
+    $("#speechLanguage").value = data.speechLanguage;
     $("#liveMode").value = data.liveMode;
   }
   $("#live").textContent = data.live ? "关闭实时字幕" : "开启实时字幕";
@@ -117,7 +118,7 @@ $("#gain").addEventListener("change", () => command("audio", { gain: Number($("#
 $("#voice").addEventListener("change", () => command("audio", { voice: $("#voice").checked }));
 $("#denoise").addEventListener("input", () => { $("#denoiseReadout").textContent = ["关闭", "轻", "中", "强"][Number($("#denoise").value)]; });
 $("#denoise").addEventListener("change", () => command("audio", { denoise: Number($("#denoise").value) }));
-$("#live").addEventListener("click", () => command("live", { audioSource: $("#audioSource").value, liveMode: $("#liveMode").value }));
+$("#live").addEventListener("click", () => command("live", { audioSource: $("#audioSource").value, speechLanguage: $("#speechLanguage").value, liveMode: $("#liveMode").value }));
 $("#tracks").addEventListener("change", () => command("track", { value: $("#tracks").value }));
 $("#subtitleFile").addEventListener("change", async (event) => {
   const file = event.target.files?.[0];

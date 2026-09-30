@@ -26,7 +26,9 @@ self.onmessage = async ({ data }) => {
   if (data.type === "audio") {
     try {
       if (!transcriber) throw new Error("模型尚未载入");
-      const result = await transcriber(new Float32Array(data.samples), { language: "chinese", task: "transcribe" });
+      const options = { task: "transcribe" };
+      if (["italian", "english", "chinese"].includes(data.language)) options.language = data.language;
+      const result = await transcriber(new Float32Array(data.samples), options);
       self.postMessage({ type: "transcript", text: result.text?.trim() || "" });
     } catch (error) {
       self.postMessage({ type: "error", error: String(error?.message || error) });

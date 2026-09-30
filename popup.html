@@ -51,9 +51,10 @@
       <section data-view="captions" hidden>
         <div class="section-heading"><h1>实时字幕</h1></div>
         <label class="field"><span>音频来源</span><select id="audioSource"><option value="video">视频音轨</option><option value="tab">共享标签页声音</option></select></label>
+        <label class="field"><span>老师说的语言</span><select id="speechLanguage"><option value="italian">意大利语</option><option value="auto">自动判断</option><option value="english">英语</option><option value="chinese">中文</option></select></label>
         <label class="field"><span>识别方式</span><select id="liveMode"><option value="auto">自动选择</option><option value="local">本地模型</option><option value="browser">浏览器识别</option></select></label>
         <button id="live" class="primary full">开启实时字幕</button>
-        <p id="liveInfo" class="hint">Firefox 会使用本地模型。首次下载模型需要联网，识别时音频留在本机。</p>
+        <p id="liveInfo" class="hint">默认识别意大利语原文。Firefox 会使用本地模型，首次下载需要联网。</p>
         <div class="divider"></div>
         <label class="field"><span>网页自带字幕</span><select id="tracks"><option value="">关闭</option></select></label>
         <label class="file-button">导入 SRT/VTT <input id="subtitleFile" type="file" accept=".srt,.vtt,text/vtt"></label>
