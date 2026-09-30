@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>课伴</title>
+  <link rel="stylesheet" href="popup.css">
+  <script src="popup.js" defer></script>
+</head>
+<body>
+  <main id="app">
+    <header>
+      <div class="brand"><span class="brand-icon">课</span><span><strong>课伴</strong><small>录播学习助手</small></span></div>
+      <span id="connection" class="connection">正在查找视频…</span>
+    </header>
+    <nav aria-label="功能菜单">
+      <button type="button" data-tab="play" class="active" aria-current="page">播放</button>
+      <button type="button" data-tab="audio">声音</button>
+      <button type="button" data-tab="captions">字幕</button>
+      <button type="button" data-tab="notes">笔记</button>
+      <button type="button" data-tab="more">更多</button>
+    </nav>
+    <div class="views">
+      <section data-view="play">
+        <div class="section-heading"><h1>播放速度</h1><span id="speedReadout">1.00×</span></div>
+        <div class="speed-grid" id="speedGrid">
+          <button data-speed="0.25">0.25</button><button data-speed="0.5">0.50</button><button data-speed="0.75">0.75</button>
+          <button data-speed="0.9">0.90</button><button data-speed="1">1.00</button><button data-speed="1.1">1.10</button>
+          <button data-speed="1.25">1.25</button><button data-speed="1.5">1.50</button><button data-speed="1.75">1.75</button>
+          <button data-speed="2">2.00</button><button data-speed="2.5">2.50</button><button data-speed="3">3.00</button>
+        </div>
+        <div class="step-row" aria-label="微调倍速">
+          <button data-step="-0.25" title="降低 0.25 倍">≪</button><button data-step="-0.05" title="降低 0.05 倍">‹</button>
+          <output id="stepReadout">1.00×</output>
+          <button data-step="0.05" title="提高 0.05 倍">›</button><button data-step="0.25" title="提高 0.25 倍">≫</button>
+        </div>
+        <div class="now-playing"><span id="time">00:00 / 00:00</span><span id="resolution"></span><strong id="videoTitle">等待视频…</strong></div>
+        <div class="transport" aria-label="播放控制">
+          <button id="rewind" title="后退 10 秒">⏮</button><button id="playPause" title="播放或暂停">▶</button><button id="advance" title="前进 10 秒">⏭</button>
+          <button id="loopA" title="设为循环起点">A</button><button id="loopB" title="设为循环终点">B</button><button id="loopToggle" title="开始或停止片段循环">循环</button>
+        </div>
+        <p id="loopLabel" class="hint">设置 A、B 两点后可循环播放。</p>
+      </section>
+      <section data-view="audio" hidden>
+        <div class="section-heading"><h1>声音优化</h1></div>
+        <label class="field"><span>音量增强 <output id="gainReadout">1.0×</output></span><input id="gain" type="range" min="1" max="3" step="0.1" value="1"></label>
+        <label class="check"><input id="voice" type="checkbox"><span>突出老师的人声</span></label>
+        <label class="field"><span>降噪滤波 <output id="denoiseReadout">关闭</output></span><input id="denoise" type="range" min="0" max="3" step="1" value="0"></label>
+        <p class="hint">可减轻嗡声和嘶声。强档可能削弱较轻的语音；效果取决于录播音轨。</p>
+      </section>
+      <section data-view="captions" hidden>
+        <div class="section-heading"><h1>实时字幕</h1></div>
+        <label class="field"><span>音频来源</span><select id="audioSource"><option value="video">视频音轨</option><option value="tab">共享标签页声音</option></select></label>
+        <label class="field"><span>识别方式</span><select id="liveMode"><option value="auto">自动选择</option><option value="local">本地模型</option><option value="browser">浏览器识别</option></select></label>
+        <button id="live" class="primary full">开启实时字幕</button>
+        <p id="liveInfo" class="hint">Firefox 会使用本地模型。首次下载模型需要联网，识别时音频留在本机。</p>
+        <div class="divider"></div>
+        <label class="field"><span>网页自带字幕</span><select id="tracks"><option value="">关闭</option></select></label>
+        <label class="file-button">导入 SRT/VTT <input id="subtitleFile" type="file" accept=".srt,.vtt,text/vtt"></label>
+      </section>
+      <section data-view="notes" hidden>
+        <div class="section-heading"><h1>时间点笔记</h1><span id="noteTime">00:00</span></div>
+        <textarea id="noteInput" placeholder="看到知识点时，随手记下来…"></textarea>
+        <div class="action-row"><button id="saveNote" class="primary">保存到当前时间</button><button id="exportNotes">导出</button></div>
+        <ul id="notesList"></ul>
+      </section>
+      <section data-view="more" hidden>
+        <div class="section-heading"><h1>更多设置</h1></div>
+        <label class="check"><input id="adsEnabled" type="checkbox"><span>启用轻量广告拦截</span></label>
+        <p class="hint">阻止部分广告域名，并尝试隐藏 YouTube 广告元素。</p>
+        <div class="divider"></div>
+        <button id="download" class="full">下载录播</button>
+        <p id="downloadInfo" class="hint">Webex 是否提供下载由录播权限决定。</p>
+      </section>
+    </div>
+    <footer id="status" role="status">打开包含录播的视频页面后即可使用。</footer>
+  </main>
+</body>
+</html>

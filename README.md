@@ -21,9 +21,9 @@
 
 Firefox：打开 `about:debugging#/runtime/this-firefox`，选择“临时载入附加组件”，选择本目录的 `manifest.json`。正式安装需先在 Mozilla Add-ons 签名。
 
-打开录播页后点击右下角“课伴”按钮。Webex 视频如果位于 iframe 内，面板会显示在该视频所在的框架。也可以点击浏览器工具栏中的扩展图标切换面板。
+打开录播页后点击浏览器工具栏中的“课伴”图标。弹窗首页是倍速和播放控制，顶部菜单可切换到声音、字幕、笔记和更多设置。Webex 视频如果位于 iframe 内，扩展会尝试连接该视频所在的框架。
 
-在 YouTube 页面即使没有开始播放视频，也可以打开“课伴”面板切换广告拦截。广告拦截默认开启，关闭后立即停止拦截；已加载的页面可能需要刷新才会重新显示广告区域。
+在 YouTube 页面即使没有开始播放视频，也可以打开“课伴”弹窗，在“更多”中切换广告拦截。广告拦截默认开启，关闭后立即停止拦截；已加载的页面可能需要刷新才会重新显示广告区域。
 
 ## 隐私与兼容性
 
@@ -35,9 +35,9 @@ Firefox：打开 `about:debugging#/runtime/this-firefox`，选择“临时载入
 
 ## 开发与发布
 
-源码仓库锁定了本地运行库依赖。运行 `pnpm install` 后，`python3 scripts/package.py` 会把运行文件复制到 `vendor/` 并生成供商店上传的 `dist/keban-0.2.0.zip`。修改源码后重新加载扩展。发布前须在目标浏览器分别测试，并为 Chrome Web Store、Edge Add-ons、Firefox Add-ons 准备隐私说明、截图、支持页面和开发者账号。
+源码仓库锁定了本地运行库依赖。运行 `pnpm install` 后，`python3 scripts/package.py` 会把运行文件复制到 `vendor/` 并生成供商店上传的 `dist/keban-0.2.1.zip`。修改源码后重新加载扩展。发布前须在目标浏览器分别测试，并为 Chrome Web Store、Edge Add-ons、Firefox Add-ons 准备隐私说明、截图、支持页面和开发者账号。
 
-运行 `python3 scripts/package.py` 可生成供商店上传的 `dist/keban-0.2.0.zip`。
+运行 `python3 scripts/package.py` 可生成供商店上传的 `dist/keban-0.2.1.zip`。
 
 License: MIT，见 [LICENSE](LICENSE)。
 

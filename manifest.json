@@ -2,15 +2,16 @@
   "manifest_version": 3,
   "name": "课伴 · 录播学习助手",
   "description": "Webex 与网页录播学习助手：实时字幕、降噪滤波、倍速、循环、笔记和轻量广告拦截。",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "icons": {
     "48": "icons/icon-48.png",
     "128": "icons/icon-128.png"
   },
   "action": {
-    "default_title": "课伴：打开或关闭学习面板"
+    "default_title": "课伴：打开学习工具",
+    "default_popup": "popup.html"
   },
-  "permissions": ["storage", "downloads", "declarativeNetRequest"],
+  "permissions": ["storage", "downloads", "declarativeNetRequest", "activeTab"],
   "declarative_net_request": {
     "rule_resources": [{ "id": "ads", "enabled": true, "path": "rules/ads.json" }]
   },

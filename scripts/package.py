@@ -21,7 +21,7 @@ for name in RUNTIME_FILES:
     VENDOR.mkdir(exist_ok=True)
     shutil.copy2(source, VENDOR / name)
 FILES = [
-    "manifest.json", "content.js", "background.js", "asr-frame.html",
+    "manifest.json", "content.js", "background.js", "popup.html", "popup.css", "popup.js", "asr-frame.html",
     "asr-frame.js", "asr-worker.js", "youtube-ads.css", "rules/ads.json",
     "LICENSE", "README.md", "PRIVACY.md",
 ]

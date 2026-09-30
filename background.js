@@ -9,15 +9,6 @@ async function syncAdsRules() {
 chrome.runtime.onInstalled.addListener(() => { syncAdsRules().catch(() => {}); });
 chrome.runtime.onStartup.addListener(() => { syncAdsRules().catch(() => {}); });
 
-chrome.action.onClicked.addListener(async (tab) => {
-  if (!tab.id) return;
-  try {
-    await chrome.tabs.sendMessage(tab.id, { type: "KEBAN_TOGGLE" });
-  } catch {
-    // Browser-internal pages do not permit content scripts.
-  }
-});
-
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
   if (message?.type === "KEBAN_ADS_SET") {
     const enabled = message.enabled === true;
