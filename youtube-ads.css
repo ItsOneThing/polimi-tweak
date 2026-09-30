@@ -1,0 +1,8 @@
+html[data-keban-ads="on"] ytd-ad-slot-renderer,
+html[data-keban-ads="on"] ytd-display-ad-renderer,
+html[data-keban-ads="on"] ytd-promoted-sparkles-web-renderer,
+html[data-keban-ads="on"] ytd-in-feed-ad-layout-renderer,
+html[data-keban-ads="on"] #player-ads,
+html[data-keban-ads="on"] .ytp-ad-overlay-container {
+  display: none !important;
+}

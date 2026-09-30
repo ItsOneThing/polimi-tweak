@@ -17,7 +17,7 @@
 
 ## 安装（开发版）
 
-Chrome / Edge：打开扩展管理页面，开启开发者模式，选择“加载已解压的扩展程序”，指向本目录。
+先安装依赖并生成本地运行文件：`pnpm install`，然后运行 `python3 scripts/package.py`。Chrome / Edge：打开扩展管理页面，开启开发者模式，选择“加载已解压的扩展程序”，指向本目录。
 
 Firefox：打开 `about:debugging#/runtime/this-firefox`，选择“临时载入附加组件”，选择本目录的 `manifest.json`。正式安装需先在 Mozilla Add-ons 签名。
 
@@ -35,7 +35,7 @@ Firefox：打开 `about:debugging#/runtime/this-firefox`，选择“临时载入
 
 ## 开发与发布
 
-扩展已包含本地运行库，无需安装 Node 即可加载。开发时可用 `pnpm install` 安装依赖；修改源码后重新加载扩展。发布前须在目标浏览器分别测试，并为 Chrome Web Store、Edge Add-ons、Firefox Add-ons 准备隐私说明、截图、支持页面和开发者账号。源码可直接推送到 GitHub；此仓库目前未连接远程仓库，不能代替用户提交商店审核。
+源码仓库锁定了本地运行库依赖。运行 `pnpm install` 后，`python3 scripts/package.py` 会把运行文件复制到 `vendor/` 并生成供商店上传的 `dist/keban-0.2.0.zip`。修改源码后重新加载扩展。发布前须在目标浏览器分别测试，并为 Chrome Web Store、Edge Add-ons、Firefox Add-ons 准备隐私说明、截图、支持页面和开发者账号。
 
 运行 `python3 scripts/package.py` 可生成供商店上传的 `dist/keban-0.2.0.zip`。
 

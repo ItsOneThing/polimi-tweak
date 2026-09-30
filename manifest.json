@@ -1,0 +1,49 @@
+{
+  "manifest_version": 3,
+  "name": "课伴 · 录播学习助手",
+  "description": "Webex 与网页录播学习助手：实时字幕、降噪滤波、倍速、循环、笔记和轻量广告拦截。",
+  "version": "0.2.0",
+  "icons": {
+    "48": "icons/icon-48.png",
+    "128": "icons/icon-128.png"
+  },
+  "action": {
+    "default_title": "课伴：打开或关闭学习面板"
+  },
+  "permissions": ["storage", "downloads", "declarativeNetRequest"],
+  "declarative_net_request": {
+    "rule_resources": [{ "id": "ads", "enabled": true, "path": "rules/ads.json" }]
+  },
+  "host_permissions": ["https://huggingface.co/*", "https://*.huggingface.co/*"],
+  "content_security_policy": {
+    "extension_pages": "script-src 'self' 'wasm-unsafe-eval'; object-src 'self'"
+  },
+  "web_accessible_resources": [{
+    "resources": ["asr-frame.html", "asr-frame.js"],
+    "matches": ["http://*/*", "https://*/*"]
+  }],
+  "content_scripts": [
+    {
+      "matches": ["http://*/*", "https://*/*"],
+      "all_frames": true,
+      "run_at": "document_idle",
+      "js": ["content.js"]
+    },
+    {
+      "matches": ["https://www.youtube.com/*", "https://m.youtube.com/*", "https://music.youtube.com/*"],
+      "css": ["youtube-ads.css"],
+      "run_at": "document_start"
+    }
+  ],
+  "background": {
+    "scripts": ["background.js"],
+    "service_worker": "background.js"
+  },
+  "browser_specific_settings": {
+    "gecko": {
+      "id": "keban@openstudy.example",
+      "data_collection_permissions": { "required": ["none"] },
+      "strict_min_version": "142.0"
+    }
+  }
+}

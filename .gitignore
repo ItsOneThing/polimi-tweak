@@ -1,0 +1,9 @@
+node_modules/
+.pnpm-store/
+dist/
+_metadata/
+.DS_Store
+*.log
+vendor/ort-wasm-simd-threaded.jsep.mjs
+vendor/ort-wasm-simd-threaded.jsep.wasm
+vendor/transformers.min.js

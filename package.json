@@ -1,0 +1,10 @@
+{
+  "name": "keban-recording-companion",
+  "version": "0.2.0",
+  "private": true,
+  "description": "Webex and HTML5 recording study companion",
+  "license": "MIT",
+  "dependencies": {
+    "@huggingface/transformers": "3.8.1"
+  }
+}
